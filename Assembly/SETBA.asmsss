@@ -1,0 +1,82 @@
+ORG 2000H ; Assuming the program starts at memory address 2000H
+
+source_start: DB ; Define the starting address of the source block
+source_end: DB ; Define the ending address of the source block
+destination_start: DB ; Define the starting address of the destination block
+
+MOV C, #0 ; Initialize the carry flag
+LXI H, source_end ; Load address of source end into HL register pair
+MOV A, M ; Load the high byte of the source end address into accumulator
+MOV D, A ; Store the high byte in D register
+DCR H ; Decrement HL to point to the last byte of the source block
+
+TRANSFER_LOOP:
+MOV A, M ; Load byte from source block
+DCX H ; Move to the previous byte in the source block
+MOV E, A ; Store the byte in E register
+LXI H, destination_start ; Load address of destination start into HL register pair
+MOV A, L ; Load the low byte of the destination address into accumulator
+INX H ; Increment the destination address
+MOV L, A ; Store the updated low byte in L register
+MOV A, H ; Load the high byte of the destination address into accumulator
+ADC D ; Add the carry
+MOV H, A ; Store the updated high byte in H register
+MOV A, E ; Load the byte from E register
+MOV M, A ; Store the byte in destination block
+CMP source_start ; Compare with the start of the source block
+JNZ TRANSFER_LOOP ; Continue loop until all bytes are transferred
+
+HLT ; Halt the program
+
+
+Certainly! Let's go through the program step by step:
+
+1. **ORG 2000H**: This directive sets the origin (starting memory address) of the program to 2000H.
+
+2. **source_start, source_end, destination_start**: These are placeholders for the starting and ending addresses of the source block and the starting address of the destination block. You need to replace them with actual memory addresses where your data is stored.
+
+3. **MOV C, #0**: This instruction initializes the carry flag to 0.
+
+4. **LXI H, source_end**: This loads the address of the end of the source block into the HL register pair.
+
+5. **MOV A, M**: This loads the high byte of the source end address into the accumulator.
+
+6. **MOV D, A**: This stores the high byte of the source end address into the D register.
+
+7. **DCR H**: This decrements the HL register pair to point to the last byte of the source block.
+
+8. **TRANSFER_LOOP**: This is the beginning of the loop where the data transfer takes place.
+
+9. **MOV A, M**: This loads a byte from the source block into the accumulator.
+
+10. **DCX H**: This decrements the HL register pair to point to the previous byte in the source block.
+
+11. **MOV E, A**: This stores the byte from the source block into the E register.
+
+12. **LXI H, destination_start**: This loads the address of the destination start into the HL register pair.
+
+13. **MOV A, L**: This loads the low byte of the destination address into the accumulator.
+
+14. **INX H**: This increments the destination address.
+
+15. **MOV L, A**: This stores the updated low byte of the destination address into the L register.
+
+16. **MOV A, H**: This loads the high byte of the destination address into the accumulator.
+
+17. **ADC D**: This adds the content of the D register (which holds the high byte of the source end address) to the accumulator.
+
+18. **MOV H, A**: This stores the updated high byte of the destination address into the H register.
+
+19. **MOV A, E**: This loads the byte from the E register (which holds the byte from the source block).
+
+20. **MOV M, A**: This stores the byte from the E register into the destination block.
+
+21. **CMP source_start**: This compares the current address with the start address of the source block.
+
+22. **JNZ TRANSFER_LOOP**: This jumps back to the TRANSFER_LOOP label if the comparison result is not zero, meaning the loop continues until all bytes are transferred.
+
+23. **HLT**: This halts the program execution once the data transfer is complete.
+
+This program effectively transfers data from the source block to the destination block in reverse order.
+
+
